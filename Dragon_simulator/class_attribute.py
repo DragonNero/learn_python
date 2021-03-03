@@ -7,12 +7,22 @@ class Attribute:
         self.value = value
 
     def increase(self, amount):
+        if amount < 0:
+            print('amount must be positive')
+            exit()
         self.value += amount
+        if self.value > 100:
+             self.value = 100
 
-    #def decrease(self):
-        #return self.hunger -= 1
+    def decrease(self, amount):
+        if amount < 0:
+            print('amount must be positive')
+            exit()
+        self.value -= amount
+        if self.value < -100:
+            self.value = -100
 
 a = Attribute("hunger", 4)
 print(a.name, a.value)
-a.increase(30)
-print('Increment of', a.name, a.value)
+a.decrease(-108)
+print('Decrement of', a.name, a.value)
