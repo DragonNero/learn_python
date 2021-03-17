@@ -4,4 +4,11 @@ cold_country= ['sweater', 'warm_coat', 'winter_boots', 'winter_pants']
 hiking = ['hiking_boots', 'sunscreen']
 diving = ['equipment']
 
-print(swimming)
+# = - an assignment(is)    == - comparison
+inp = input('Where are you going:')
+if inp == 'swimming':
+    print(swimming)
+elif inp == 'dragon_travel':
+    print(dragon_travel)
+else:
+    print("Not found")
