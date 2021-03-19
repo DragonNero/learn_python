@@ -24,9 +24,15 @@ checkList = {
         'equipment'
     ]
 }
-inp = input('Where are you going:')
-inp = inp.strip()
-if inp in checkList:
-    print(checkList.get(inp))
-else:
-    print("Not found")
+
+while True:
+    inp = input('Where are you going:')
+    inp = inp.strip()
+
+    if inp == 'quit':
+        break
+
+    if inp in checkList:
+        print(checkList.get(inp))
+    else:
+        print("Not found")
