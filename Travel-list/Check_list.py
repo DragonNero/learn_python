@@ -24,7 +24,7 @@ checkList = {
         'equipment'
     ]
 }
-
+finalList = []
 while True:
     inp = input('Where are you going:')
     inp = inp.strip()
@@ -33,6 +33,9 @@ while True:
         break
 
     if inp in checkList:
-        print(checkList.get(inp))
+        print('Item added in the final list')
+        finalList = finalList + checkList.get(inp)
     else:
         print("Not found")
+
+print(finalList)
