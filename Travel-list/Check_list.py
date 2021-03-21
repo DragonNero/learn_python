@@ -1,4 +1,9 @@
 # = - an assignment(is)    == - comparison
+import sqlite3
+
+database = sqlite3.connect('Travel_list.db')
+cur = database.cursor()
+
 checkList = {
     'swimming' : [
         'swimsuit',
@@ -32,6 +37,9 @@ while True:
     if inp == 'quit':
         break
 
+    cur.execute('SELECT i.title FROM item i JOIN category c ON i.category_id = c.id WHERE c.title = ? ', (inp,))
+    itemResults = cur.fetchall()
+    print(itemResults)
     if inp in checkList:
         print('Item added in the final list')
         finalList = finalList + checkList.get(inp)
