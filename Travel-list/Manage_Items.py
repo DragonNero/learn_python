@@ -6,9 +6,19 @@ from PyQt5.QtWidgets import *
 
 app = QApplication(sys.argv)
 
+def displayCategoryTable():
+    return '<h1>Category</h1>'
+
+def displayItemTable():
+    return '<h1>Item</h1>'
+
 def selectionchange(text):
-    labelBox.setText(text)
-    print(text)
+    if text == "Categories":
+        labelBox.setText(displayCategoryTable())
+    elif text == "Items":
+        labelBox.setText(displayItemTable())
+    else:
+        print('Group is not defined')
 
 window = QWidget()
 window.setWindowTitle('Manage items and categories')
@@ -18,7 +28,7 @@ selectBox = QComboBox()
 selectBox.addItems(["Categories", "Items"])
 selectBox.currentTextChanged.connect(selectionchange)
 layout.addWidget(selectBox, 0, 0)
-labelBox = QLabel('<h1>Hello I am Dragon!</h1>')
+labelBox = QLabel(displayCategoryTable())
 layout.addWidget(labelBox, 1, 0)
 
 window.setLayout(layout)
