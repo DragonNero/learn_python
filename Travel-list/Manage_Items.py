@@ -1,13 +1,36 @@
 import sys
+import sqlite3
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+database = sqlite3.connect('Travel_list.db')
+cur = database.cursor()
+
 app = QApplication(sys.argv)
 
 def displayCategoryTable():
-    return '<h1>Category</h1>'
+    cur.execute('SELECT id, title FROM category')
+    categories = cur.fetchall()
+    categoriesTable = """
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+"""
+    categoriesTable += """
+        </tbody>
+        </table>
+"""
+    return categoriesTable
+
+
+
 
 def displayItemTable():
     return '<h1>Item</h1>'
