@@ -14,6 +14,7 @@ def displayCategoryTable():
     cur.execute('SELECT id, title FROM category')
     categories = cur.fetchall()
     categoriesTable = """
+    <h1>Categories</h1>
     <table>
         <thead>
             <tr>
@@ -23,9 +24,12 @@ def displayCategoryTable():
         </thead>
         <tbody>
 """
+    for category in categories:
+        categoriesTable += "<tr><td>"+str(category[0])+"</td><td>"+category[1]+"</td></tr>"
+
     categoriesTable += """
         </tbody>
-        </table>
+    </table>
 """
     return categoriesTable
 
@@ -33,7 +37,29 @@ def displayCategoryTable():
 
 
 def displayItemTable():
-    return '<h1>Item</h1>'
+    cur.execute('SELECT i.id, c.title AS category, i.title AS item FROM item i LEFT JOIN category c ON c.id = i.category_id')
+    items = cur.fetchall()
+    itemsTable = """
+    <h1>Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+"""
+    for item in items:
+        itemsTable += "<tr><td>"+str(item[0])+"</td><td>"+item[1]+"</td><td>"+item[2]+"</td></tr>"
+
+    itemsTable += """
+        </tbody>
+    </table>
+"""
+    return itemsTable
+
 
 def selectionchange(text):
     if text == "Categories":
