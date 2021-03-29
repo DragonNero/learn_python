@@ -15,6 +15,24 @@ def displayCategoryTable():
     categories = cur.fetchall()
     categoriesTable = """
     <h1>Categories</h1>
+    <style>
+    table {
+     border-collapse: collapse;
+     width: 100%;
+    }
+    table td, table th {
+     border: 1px solid #ddd;
+     padding: 8px;
+    }
+    table tr:hover {background-color: #ddd;}
+    table th {
+     padding-top: 12px;
+     padding-bottom: 12px;
+     text-align: left;
+     background-color: #96999F;
+     color: white;
+    }
+    </style>
     <table>
         <thead>
             <tr>
@@ -41,6 +59,24 @@ def displayItemTable():
     items = cur.fetchall()
     itemsTable = """
     <h1>Items</h1>
+    <style>
+    table {
+     border-collapse: collapse;
+     width: 100%;
+    }
+    table td, table th {
+     border: 1px solid #ddd;
+     padding: 8px;
+    }
+    table tr:hover {background-color: #ddd;}
+    table th {
+     padding-top: 12px;
+     padding-bottom: 12px;
+     text-align: left;
+     background-color: #96999F;
+     color: white;
+    }
+    </style>
     <table>
         <thead>
             <tr>
@@ -71,14 +107,14 @@ def selectionchange(text):
 
 window = QWidget()
 window.setWindowTitle('Manage items and categories')
-#window.setGeometry(0, 0, 400, 80)
 layout = QGridLayout()
 selectBox = QComboBox()
 selectBox.addItems(["Categories", "Items"])
 selectBox.currentTextChanged.connect(selectionchange)
 layout.addWidget(selectBox, 0, 0)
+layout.addWidget(QPushButton('Button (0, 1)'), 0, 1)
 labelBox = QLabel(displayCategoryTable())
-layout.addWidget(labelBox, 1, 0)
+layout.addWidget(labelBox, 1, 0, 1, 2)
 
 window.setLayout(layout)
 window.show()
