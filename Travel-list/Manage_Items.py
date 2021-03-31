@@ -49,7 +49,15 @@ def displayCategoryTable():
         </tbody>
     </table>
 """
+    categoriesTable = QTableWidget()
+    categoriesTable.setRowCount(2)
+    categoriesTable.setColumnCount(2)
+    categoriesTable.setItem(0,0,QTableWidgetItem('Id'))
+    categoriesTable.setItem(0,1,QTableWidgetItem('Title'))
+    categoriesTable.setItem(1,0,QTableWidgetItem('Test id'))
+    categoriesTable.setItem(1,1,QTableWidgetItem('Test title'))
     return categoriesTable
+
 
 
 
@@ -98,8 +106,10 @@ def displayItemTable():
 
 
 def selectionchange(text):
+    layout.itemAt(3).widget().deleteLater()
     if text == "Categories":
-        labelBox.setText(displayCategoryTable())
+        labelBox.setText('<h1>Categories</h1>')
+        layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
     elif text == "Items":
         labelBox.setText(displayItemTable())
     else:
@@ -113,8 +123,9 @@ selectBox.addItems(["Categories", "Items"])
 selectBox.currentTextChanged.connect(selectionchange)
 layout.addWidget(selectBox, 0, 0)
 layout.addWidget(QPushButton('Button (0, 1)'), 0, 1)
-labelBox = QLabel(displayCategoryTable())
-layout.addWidget(labelBox, 1, 0, 1, 2)
+labelBox = QLabel('<h1>Categories</h1>')
+layout.addWidget(labelBox, 1, 0)
+layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
 
 window.setLayout(layout)
 window.show()
