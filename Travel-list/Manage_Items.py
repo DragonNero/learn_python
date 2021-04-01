@@ -13,95 +13,39 @@ app = QApplication(sys.argv)
 def displayCategoryTable():
     cur.execute('SELECT id, title FROM category')
     categories = cur.fetchall()
-    categoriesTable = """
-    <h1>Categories</h1>
-    <style>
-    table {
-     border-collapse: collapse;
-     width: 100%;
-    }
-    table td, table th {
-     border: 1px solid #ddd;
-     padding: 8px;
-    }
-    table tr:hover {background-color: #ddd;}
-    table th {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: left;
-     background-color: #96999F;
-     color: white;
-    }
-    </style>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-            </tr>
-        </thead>
-        <tbody>
-"""
-    for category in categories:
-        categoriesTable += "<tr><td>"+str(category[0])+"</td><td>"+category[1]+"</td></tr>"
 
-    categoriesTable += """
-        </tbody>
-    </table>
-"""
     categoriesTable = QTableWidget()
-    categoriesTable.setRowCount(2)
+    categoriesTable.setRowCount(len(categories)+1)
     categoriesTable.setColumnCount(2)
     categoriesTable.setItem(0,0,QTableWidgetItem('Id'))
     categoriesTable.setItem(0,1,QTableWidgetItem('Title'))
-    categoriesTable.setItem(1,0,QTableWidgetItem('Test id'))
-    categoriesTable.setItem(1,1,QTableWidgetItem('Test title'))
+
+    numberOfRow = 1
+    for category in categories:
+        categoriesTable.setItem(numberOfRow,0,QTableWidgetItem(str(category[0])))
+        categoriesTable.setItem(numberOfRow,1,QTableWidgetItem(category[1]))
+        numberOfRow  = numberOfRow  + 1
+
     return categoriesTable
-
-
-
-
 
 def displayItemTable():
     cur.execute('SELECT i.id, c.title AS category, i.title AS item FROM item i LEFT JOIN category c ON c.id = i.category_id')
     items = cur.fetchall()
-    itemsTable = """
-    <h1>Items</h1>
-    <style>
-    table {
-     border-collapse: collapse;
-     width: 100%;
-    }
-    table td, table th {
-     border: 1px solid #ddd;
-     padding: 8px;
-    }
-    table tr:hover {background-color: #ddd;}
-    table th {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: left;
-     background-color: #96999F;
-     color: white;
-    }
-    </style>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Category</th>
-                <th>Title</th>
-            </tr>
-        </thead>
-        <tbody>
-"""
-    for item in items:
-        itemsTable += "<tr><td>"+str(item[0])+"</td><td>"+item[1]+"</td><td>"+item[2]+"</td></tr>"
 
-    itemsTable += """
-        </tbody>
-    </table>
-"""
+    itemsTable = QTableWidget()
+    itemsTable.setRowCount(len(items)+1)
+    itemsTable.setColumnCount(3)
+    itemsTable.setItem(0,0,QTableWidgetItem('Id'))
+    itemsTable.setItem(0,1,QTableWidgetItem('Category'))
+    itemsTable.setItem(0,2,QTableWidgetItem('Title'))
+
+    numberOfRow = 1
+    for item in items:
+        itemsTable.setItem(numberOfRow,0,QTableWidgetItem(str(item[0])))
+        itemsTable.setItem(numberOfRow,1,QTableWidgetItem(item[1]))
+        itemsTable.setItem(numberOfRow,2,QTableWidgetItem(item[2]))
+        numberOfRow  = numberOfRow  + 1
+
     return itemsTable
 
 
@@ -111,7 +55,8 @@ def selectionchange(text):
         labelBox.setText('<h1>Categories</h1>')
         layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
     elif text == "Items":
-        labelBox.setText(displayItemTable())
+        labelBox.setText('<h1>Items</h1>')
+        layout.addWidget(displayItemTable(), 2, 0, 1, 2)
     else:
         print('Group is not defined')
 
