@@ -48,8 +48,7 @@ def displayItemTable():
 
     return itemsTable
 
-
-def selectionchange(text):
+def selectionChange(text):
     layout.itemAt(3).widget().deleteLater()
     if text == "Categories":
         labelBox.setText('<h1>Categories</h1>')
@@ -60,14 +59,36 @@ def selectionchange(text):
     else:
         print('Group is not defined')
 
+def addWindow():
+    addWindow = QWidget()
+    addWindow.setWindowTitle('Add items and categories')
+
+    addLayout = QGridLayout()
+    addLabelBox = QLabel('<h1>New</h1>')
+    addLayout.addWidget(addLabelBox, 0, 0, 1, 2)
+    addCancelButton = QPushButton('Cancel')
+    addCancelButton.clicked.connect(closeWindow)
+    addLayout.addWidget(addCancelButton, 2, 0)
+    addSaveButton = QPushButton('Save')
+    addLayout.addWidget(addSaveButton, 2, 1)
+    addWindow.setLayout(addLayout)
+    addWindow.show()
+
+def closeWindow():
+    addWindow.close()
+
 window = QWidget()
 window.setWindowTitle('Manage items and categories')
 layout = QGridLayout()
 selectBox = QComboBox()
 selectBox.addItems(["Categories", "Items"])
-selectBox.currentTextChanged.connect(selectionchange)
+selectBox.currentTextChanged.connect(selectionChange)
 layout.addWidget(selectBox, 0, 0)
-layout.addWidget(QPushButton('Button (0, 1)'), 0, 1)
+
+addButton = QPushButton('Add')
+addButton.clicked.connect(addWindow)
+layout.addWidget(addButton, 0, 1)
+
 labelBox = QLabel('<h1>Categories</h1>')
 layout.addWidget(labelBox, 1, 0)
 layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
