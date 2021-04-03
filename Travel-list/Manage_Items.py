@@ -59,19 +59,23 @@ def selectionChange(text):
     else:
         print('Group is not defined')
 
-def addWindow():
-    addWindow = QWidget()
-    addWindow.setWindowTitle('Add items and categories')
+class formDialog(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Add items and categories')
 
-    addLayout = QGridLayout()
-    addLabelBox = QLabel('<h1>New</h1>')
-    addLayout.addWidget(addLabelBox, 0, 0, 1, 2)
-    addCancelButton = QPushButton('Cancel')
-    addCancelButton.clicked.connect(closeWindow)
-    addLayout.addWidget(addCancelButton, 2, 0)
-    addSaveButton = QPushButton('Save')
-    addLayout.addWidget(addSaveButton, 2, 1)
-    addWindow.setLayout(addLayout)
+        addLayout = QGridLayout()
+        addLabelBox = QLabel('<h1>New</h1>')
+        addLayout.addWidget(addLabelBox, 0, 0, 1, 2)
+        addCancelButton = QPushButton('Cancel')
+        addCancelButton.clicked.connect(closeWindow)
+        addLayout.addWidget(addCancelButton, 2, 0)
+        addSaveButton = QPushButton('Save')
+        addLayout.addWidget(addSaveButton, 2, 1)
+        self.setLayout(addLayout)
+
+def addWindow():
+    addWindow = formDialog()
     addWindow.show()
 
 def closeWindow():
