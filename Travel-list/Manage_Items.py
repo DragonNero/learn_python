@@ -2,83 +2,6 @@ import sys, sqlite3
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-"""
-
-app = QApplication(sys.argv)
-
-def displayCategoryTable():
-    cur.execute('SELECT id, title FROM category')
-    categories = cur.fetchall()
-
-    categoriesTable = QTableWidget()
-    categoriesTable.setRowCount(len(categories)+1)
-    categoriesTable.setColumnCount(2)
-    categoriesTable.setItem(0,0,QTableWidgetItem('Id'))
-    categoriesTable.setItem(0,1,QTableWidgetItem('Title'))
-
-    numberOfRow = 1
-    for category in categories:
-        categoriesTable.setItem(numberOfRow,0,QTableWidgetItem(str(category[0])))
-        categoriesTable.setItem(numberOfRow,1,QTableWidgetItem(category[1]))
-        numberOfRow  = numberOfRow  + 1
-
-    return categoriesTable
-
-def displayItemTable():
-    cur.execute('SELECT i.id, c.title AS category, i.title AS item FROM item i LEFT JOIN category c ON c.id = i.category_id')
-    items = cur.fetchall()
-
-    itemsTable = QTableWidget()
-    itemsTable.setRowCount(len(items)+1)
-    itemsTable.setColumnCount(3)
-    itemsTable.setItem(0,0,QTableWidgetItem('Id'))
-    itemsTable.setItem(0,1,QTableWidgetItem('Category'))
-    itemsTable.setItem(0,2,QTableWidgetItem('Title'))
-
-    numberOfRow = 1
-    for item in items:
-        itemsTable.setItem(numberOfRow,0,QTableWidgetItem(str(item[0])))
-        itemsTable.setItem(numberOfRow,1,QTableWidgetItem(item[1]))
-        itemsTable.setItem(numberOfRow,2,QTableWidgetItem(item[2]))
-        numberOfRow  = numberOfRow  + 1
-
-    return itemsTable
-
-def selectionChange(text):
-    layout.itemAt(3).widget().deleteLater()
-    if text == "Categories":
-        labelBox.setText('<h1>Categories</h1>')
-        layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
-    elif text == "Items":
-        labelBox.setText('<h1>Items</h1>')
-        layout.addWidget(displayItemTable(), 2, 0, 1, 2)
-    else:
-        print('Group is not defined')
-
-class formDialog(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle('Add items and categories')
-
-        addLayout = QGridLayout()
-        addLabelBox = QLabel('<h1>New</h1>')
-        addLayout.addWidget(addLabelBox, 0, 0, 1, 2)
-        addCancelButton = QPushButton('Cancel')
-        addCancelButton.clicked.connect(closeWindow)
-        addLayout.addWidget(addCancelButton, 2, 0)
-        addSaveButton = QPushButton('Save')
-        addLayout.addWidget(addSaveButton, 2, 1)
-        self.setLayout(addLayout)
-
-def addWindow():
-    addWindow = formDialog()
-    addWindow.show()
-
-def closeWindow():
-    addWindow.close()
-
-"""
-
 database = sqlite3.connect('Travel_list.db')
 cur = database.cursor()
 
@@ -97,15 +20,15 @@ class Ui_MainWindow(object):
         self.layout.addWidget(self.selectBox, 0, 0)
 
         self.addButton = QtWidgets.QPushButton(self.centralWidget)
-        self.addButton.clicked.connect(addWindow)
         self.addButton.setObjectName("Add")
         self.layout.addWidget(self.addButton, 0, 1)
 
         self.labelBox = QtWidgets.QLabel('<h1>Categories</h1>')
         self.layout.addWidget(self.labelBox, 1, 0)
-        self.layout.addWidget(displayCategoryTable(), 2, 0, 1, 2)
+        self.layout.addWidget(self.displayCategoryTable(), 2, 0, 1, 2)
 
-        MainWindow.setCentralWidget(self.layout)
+        self.centralWidget.setLayout(self.layout)
+        MainWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -126,16 +49,16 @@ class Ui_MainWindow(object):
         cur.execute('SELECT id, title FROM category')
         categories = cur.fetchall()
 
-        categoriesTable = QTableWidget()
+        categoriesTable = QtWidgets.QTableWidget()
         categoriesTable.setRowCount(len(categories)+1)
         categoriesTable.setColumnCount(2)
-        categoriesTable.setItem(0,0,QTableWidgetItem('Id'))
-        categoriesTable.setItem(0,1,QTableWidgetItem('Title'))
+        categoriesTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
+        categoriesTable.setItem(0,1,QtWidgets.QTableWidgetItem('Title'))
 
         numberOfRow = 1
         for category in categories:
-            categoriesTable.setItem(numberOfRow,0,QTableWidgetItem(str(category[0])))
-            categoriesTable.setItem(numberOfRow,1,QTableWidgetItem(category[1]))
+            categoriesTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
+            categoriesTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
             numberOfRow  = numberOfRow  + 1
 
         return categoriesTable
@@ -144,30 +67,30 @@ class Ui_MainWindow(object):
         cur.execute('SELECT i.id, c.title AS category, i.title AS item FROM item i LEFT JOIN category c ON c.id = i.category_id')
         items = cur.fetchall()
 
-        itemsTable = QTableWidget()
+        itemsTable = QtWidgets.QTableWidget()
         itemsTable.setRowCount(len(items)+1)
         itemsTable.setColumnCount(3)
-        itemsTable.setItem(0,0,QTableWidgetItem('Id'))
-        itemsTable.setItem(0,1,QTableWidgetItem('Category'))
-        itemsTable.setItem(0,2,QTableWidgetItem('Title'))
+        itemsTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
+        itemsTable.setItem(0,1,QtWidgets.QTableWidgetItem('Category'))
+        itemsTable.setItem(0,2,QtWidgets.QTableWidgetItem('Title'))
 
         numberOfRow = 1
         for item in items:
-            itemsTable.setItem(numberOfRow,0,QTableWidgetItem(str(item[0])))
-            itemsTable.setItem(numberOfRow,1,QTableWidgetItem(item[1]))
-            itemsTable.setItem(numberOfRow,2,QTableWidgetItem(item[2]))
+            itemsTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(item[0])))
+            itemsTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(item[1]))
+            itemsTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
             numberOfRow  = numberOfRow  + 1
 
         return itemsTable
 
     def selectionChange(self, text):
-        layout.itemAt(3).widget().deleteLater()
+        self.layout.itemAt(3).widget().deleteLater()
         if text == "Categories":
-            labelBox.setText('<h1>Categories</h1>')
-            layout.addWidget(self.displayCategoryTable(), 2, 0, 1, 2)
+            self.labelBox.setText('<h1>Categories</h1>')
+            self.layout.addWidget(self.displayCategoryTable(), 2, 0, 1, 2)
         elif text == "Items":
-            labelBox.setText('<h1>Items</h1>')
-            layout.addWidget(self.displayItemTable(), 2, 0, 1, 2)
+            self.labelBox.setText('<h1>Items</h1>')
+            self.layout.addWidget(self.displayItemTable(), 2, 0, 1, 2)
         else:
             print('Group is not defined')
 
