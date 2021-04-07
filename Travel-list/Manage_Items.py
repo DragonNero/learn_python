@@ -1,4 +1,5 @@
 import sys, sqlite3
+from functools import partial
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -9,7 +10,6 @@ cur = database.cursor()
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
-        MainWindow.setObjectName('Manage items and categories')
         MainWindow.resize(400, 300)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
 
@@ -20,7 +20,6 @@ class Ui_MainWindow(object):
         self.layout.addWidget(self.selectBox, 0, 0)
 
         self.addButton = QtWidgets.QPushButton(self.centralWidget)
-        self.addButton.setObjectName("Add")
         self.layout.addWidget(self.addButton, 0, 1)
 
         self.labelBox = QtWidgets.QLabel('<h1>Categories</h1>')
@@ -36,8 +35,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.addButton.setText(_translate("MainWindow", "LoadDialogWindow"))
+        MainWindow.setWindowTitle("Manage items and categories")
+        self.addButton.setText("Add")
 
     def LoadDialogWindow(self):
         DialogWindow = QtWidgets.QMainWindow()
@@ -100,10 +99,19 @@ class Ui_DialogWindow(object):
         DialogWindow.setObjectName("DialogWindow")
         DialogWindow.resize(400, 300)
         self.centralWidget = QtWidgets.QWidget(DialogWindow)
-        self.centralWidget.setObjectName("centralWidget")
-        self.pushButton = QtWidgets.QPushButton(self.centralWidget)
-        self.pushButton.setGeometry(QtCore.QRect(110, 130, 191, 23))
-        self.pushButton.setObjectName("pushButton")
+        self.layout = QtWidgets.QGridLayout()
+
+        self.labelBox = QtWidgets.QLabel('<h1>Add</h1>')
+        self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
+
+        self.cancelButton = QtWidgets.QPushButton(self.centralWidget)
+        self.cancelButton.clicked.connect(partial(self.Cancel, DialogWindow))
+        self.layout.addWidget(self.cancelButton, 3, 0)
+
+        self.saveButton = QtWidgets.QPushButton(self.centralWidget)
+        self.layout.addWidget(self.saveButton, 3, 1)
+
+        self.centralWidget.setLayout(self.layout)
         DialogWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(DialogWindow)
@@ -111,9 +119,12 @@ class Ui_DialogWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("DialogWindow", "DialogWindow"))
-        self.pushButton.setText(_translate("DialogWindow", "Congratz !"))
+        MainWindow.setWindowTitle("Add Window")
+        self.cancelButton.setText("Cancel")
+        self.saveButton.setText("Save")
 
+    def Cancel (self, DialogWindow):
+        DialogWindow.close()
 
 
 class Controller:
@@ -135,12 +146,11 @@ class Controller:
         self.DialogWindow = QtWidgets.QMainWindow()
         self.ui = Ui_DialogWindow()
         self.ui.setupUi(self.DialogWindow)
-        self.ui.pushButton.clicked.connect(self.Print)
+
 
         self.DialogWindow.show()
 
-    def Print(self):
-        print('After 99 hours of trying out everything')
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
