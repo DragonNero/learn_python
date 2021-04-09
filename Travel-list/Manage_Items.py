@@ -8,6 +8,9 @@ cur = database.cursor()
 
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.selectedTable = 'Categories'
+
     def setupUi(self, MainWindow):
 
         MainWindow.resize(400, 300)
@@ -84,6 +87,7 @@ class Ui_MainWindow(object):
 
     def selectionChange(self, text):
         self.layout.itemAt(3).widget().deleteLater()
+        self.selectedTable = text
         if text == "Categories":
             self.labelBox.setText('<h1>Categories</h1>')
             self.layout.addWidget(self.displayCategoryTable(), 2, 0, 1, 2)
@@ -94,6 +98,8 @@ class Ui_MainWindow(object):
             print('Group is not defined')
 
 class Ui_DialogWindow(object):
+    def __init__(self, selectedTable):
+        self.selectedTable = selectedTable
 
     def setupUi(self, DialogWindow):
         DialogWindow.setObjectName("DialogWindow")
@@ -101,7 +107,7 @@ class Ui_DialogWindow(object):
         self.centralWidget = QtWidgets.QWidget(DialogWindow)
         self.layout = QtWidgets.QGridLayout()
 
-        self.labelBox = QtWidgets.QLabel('<h1>Add</h1>')
+        self.labelBox = QtWidgets.QLabel('<h1>Add '+ self.selectedTable+'</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
 
         self.cancelButton = QtWidgets.QPushButton(self.centralWidget)
@@ -135,21 +141,19 @@ class Controller:
     def Show_MainWindow(self):
 
         self.MainWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.MainWindow)
-        self.ui.addButton.clicked.connect(self.Show_DialogWindow)
+        self.mainUi = Ui_MainWindow()
+        self.mainUi.setupUi(self.MainWindow)
+        self.mainUi.addButton.clicked.connect(self.Show_DialogWindow)
 
         self.MainWindow.show()
 
     def Show_DialogWindow(self):
 
         self.DialogWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_DialogWindow()
-        self.ui.setupUi(self.DialogWindow)
-
+        self.DialogUi = Ui_DialogWindow(self.mainUi.selectedTable)
+        self.DialogUi.setupUi(self.DialogWindow)
 
         self.DialogWindow.show()
-
 
 
 if __name__ == '__main__':
