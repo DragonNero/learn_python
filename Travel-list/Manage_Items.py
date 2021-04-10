@@ -110,6 +110,11 @@ class Ui_DialogWindow(object):
         self.labelBox = QtWidgets.QLabel('<h1>Add '+ self.selectedTable+'</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
 
+        self.inputTitleLabel = QtWidgets.QLabel('Title')
+        self.layout.addWidget(self.inputTitleLabel, 1, 0)
+        self.inputTitle = QtWidgets.QLineEdit()
+        self.layout.addWidget(self.inputTitle, 1, 1)
+
         self.cancelButton = QtWidgets.QPushButton(self.centralWidget)
         self.cancelButton.clicked.connect(partial(self.Cancel, DialogWindow))
         self.layout.addWidget(self.cancelButton, 3, 0)
