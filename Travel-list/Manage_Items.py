@@ -5,7 +5,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 database = sqlite3.connect('Travel_list.db')
 cur = database.cursor()
-
+cur.execute('SELECT id, title FROM category ORDER BY title ASC')
+categories = cur.fetchall()
 
 class Ui_MainWindow(object):
     def __init__(self):
@@ -48,8 +49,7 @@ class Ui_MainWindow(object):
         DialogWindow.show()
 
     def displayCategoryTable(self):
-        cur.execute('SELECT id, title FROM category')
-        categories = cur.fetchall()
+
 
         categoriesTable = QtWidgets.QTableWidget()
         categoriesTable.setRowCount(len(categories)+1)
@@ -114,6 +114,14 @@ class Ui_DialogWindow(object):
         self.layout.addWidget(self.inputTitleLabel, 1, 0)
         self.inputTitle = QtWidgets.QLineEdit()
         self.layout.addWidget(self.inputTitle, 1, 1)
+
+        if self.selectedTable == 'Items':
+            self.selectCategoryLabel = QtWidgets.QLabel('Category')
+            self.layout.addWidget(self.selectCategoryLabel, 2, 0)
+            self.selectCategory = QtWidgets.QComboBox()
+            for category in categories:
+                self.selectCategory.addItem(category[1])
+            self.layout.addWidget(self.selectCategory, 2, 1)
 
         self.cancelButton = QtWidgets.QPushButton(self.centralWidget)
         self.cancelButton.clicked.connect(partial(self.Cancel, DialogWindow))
