@@ -128,6 +128,7 @@ class Ui_DialogWindow(object):
         self.layout.addWidget(self.cancelButton, 3, 0)
 
         self.saveButton = QtWidgets.QPushButton(self.centralWidget)
+        self.saveButton.clicked.connect(partial(self.Save, DialogWindow))
         self.layout.addWidget(self.saveButton, 3, 1)
 
         self.centralWidget.setLayout(self.layout)
@@ -143,6 +144,17 @@ class Ui_DialogWindow(object):
         self.saveButton.setText("Save")
 
     def Cancel (self, DialogWindow):
+        DialogWindow.close()
+
+    def Save (self, DialogWindow):
+        titleValue = self.inputTitle.text()
+        print(titleValue)
+        if self.selectedTable == "Categories":
+            print("Save categories")
+        elif self.selectedTable == "Items":
+            print("Save items")
+        else:
+            print('Group is not defined')
         DialogWindow.close()
 
 
