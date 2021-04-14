@@ -147,14 +147,22 @@ class Ui_DialogWindow(object):
         DialogWindow.close()
 
     def Save (self, DialogWindow):
-        titleValue = self.inputTitle.text()
+        if self.selectedTable != "Categories" and self.selectedTable != "Items":
+            print('Group is not defined')
+            return
+
+        titleValue = self.inputTitle.text().strip()
+        if titleValue == '':
+            print('Add value')
+            return
+
         print(titleValue)
         if self.selectedTable == "Categories":
             print("Save categories")
         elif self.selectedTable == "Items":
+            selectedCategory = self.selectCategory.currentText()
+            print(selectedCategory)
             print("Save items")
-        else:
-            print('Group is not defined')
         DialogWindow.close()
 
 
