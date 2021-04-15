@@ -158,11 +158,12 @@ class Ui_DialogWindow(object):
 
         print(titleValue)
         if self.selectedTable == "Categories":
-            print("Save categories")
+            cur.execute('INSERT INTO category (title) VALUES (?)',(titleValue,))
+            database.commit()
         elif self.selectedTable == "Items":
             selectedCategory = self.selectCategory.currentText()
-            print(selectedCategory)
-            print("Save items")
+            cur.execute('INSERT INTO item (category_id, title) VALUES ((SELECT id FROM category WHERE title = ? LIMIT 1),?)',(selectedCategory, titleValue))
+            database.commit()
         DialogWindow.close()
 
 
@@ -193,4 +194,5 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     Controller = Controller()
     Controller.Show_MainWindow()
+    #cur.close()
     sys.exit(app.exec_())
