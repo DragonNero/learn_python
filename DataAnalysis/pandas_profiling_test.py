@@ -22,7 +22,6 @@ dct = {'ID': {0: 23, 1: 43, 2: 12, 3: 13,
 # forming dataframe and printing
 data = pd.DataFrame(dct)
 print(data)
-
 # forming ProfileReport and save
 # as output.html file
 profile = pp.ProfileReport(data)
