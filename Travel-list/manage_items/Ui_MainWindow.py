@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
+from functools import partial
 
 class Ui_MainWindow(object):
     def __init__(self, database):
@@ -45,19 +46,22 @@ class Ui_MainWindow(object):
         DialogWindow.show()
 
     def displayCategoryTable(self):
-
-
         categoriesTable = QtWidgets.QTableWidget()
         categoriesTable.setRowCount(len(self.categories)+1)
-        categoriesTable.setColumnCount(2)
+        categoriesTable.setColumnCount(3)
         categoriesTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
         categoriesTable.setItem(0,1,QtWidgets.QTableWidgetItem('Title'))
+        categoriesTable.setItem(0,2,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for category in self.categories:
             categoriesTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
             categoriesTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
+            buttonDelete = QtWidgets.QPushButton('Delete')
+            buttonDelete.clicked.connect(partial(self.Delete, category[0]))
+            categoriesTable.setCellWidget(numberOfRow,2,buttonDelete)
             numberOfRow  = numberOfRow  + 1
+
 
         return categoriesTable
 
@@ -92,3 +96,6 @@ class Ui_MainWindow(object):
             self.layout.addWidget(self.displayItemTable(), 2, 0, 1, 2)
         else:
             print('Group is not defined')
+
+    def Delete(self, id):
+        print(self.selectedTable, id)
