@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from functools import partial
 
 class Ui_MainWindow(object):
@@ -57,7 +57,8 @@ class Ui_MainWindow(object):
         for category in self.categories:
             categoriesTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
             categoriesTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
-            buttonDelete = QtWidgets.QPushButton('Delete')
+            buttonDelete = QtWidgets.QPushButton()
+            buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
             buttonDelete.clicked.connect(partial(self.Delete, category[0]))
             categoriesTable.setCellWidget(numberOfRow,2,buttonDelete)
             numberOfRow  = numberOfRow  + 1
