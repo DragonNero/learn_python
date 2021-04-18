@@ -72,16 +72,21 @@ class Ui_MainWindow(object):
 
         itemsTable = QtWidgets.QTableWidget()
         itemsTable.setRowCount(len(items)+1)
-        itemsTable.setColumnCount(3)
+        itemsTable.setColumnCount(4)
         itemsTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
         itemsTable.setItem(0,1,QtWidgets.QTableWidgetItem('Category'))
         itemsTable.setItem(0,2,QtWidgets.QTableWidgetItem('Title'))
+        itemsTable.setItem(0,3,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for item in items:
             itemsTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(item[0])))
             itemsTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(item[1]))
             itemsTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
+            buttonDelete = QtWidgets.QPushButton()
+            buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
+            buttonDelete.clicked.connect(partial(self.Delete, item[0]))
+            itemsTable.setCellWidget(numberOfRow,3,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
         return itemsTable
@@ -99,4 +104,15 @@ class Ui_MainWindow(object):
             print('Group is not defined')
 
     def Delete(self, id):
-        print(self.selectedTable, id)
+        if self.selectedTable == "Categories":
+            print("Categories")
+            #TO DO check that it's deleted then remove from table 
+            self.cur.execute('DELETE FROM item WHERE category_id = ?',(id,))
+            self.cur.execute('DELETE FROM category WHERE id = ?',(id,))
+            self.database.commit()
+        elif self.selectedTable == "Items":
+            print("Items")
+            self.cur.execute('DELETE FROM item WHERE id = ?',(id,))
+            self.database.commit()
+        else:
+            print('Group is not defined')
