@@ -6,8 +6,6 @@ class Ui_MainWindow(object):
         self.database = database
         self.selectedTable = 'Categories'
         self.cur = self.database.cursor()
-        self.cur.execute('SELECT id, title FROM category ORDER BY title ASC')
-        self.categories = self.cur.fetchall()
 
     def setupUi(self, MainWindow):
 
@@ -46,50 +44,53 @@ class Ui_MainWindow(object):
         DialogWindow.show()
 
     def displayCategoryTable(self):
-        categoriesTable = QtWidgets.QTableWidget()
-        categoriesTable.setRowCount(len(self.categories)+1)
-        categoriesTable.setColumnCount(3)
-        categoriesTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
-        categoriesTable.setItem(0,1,QtWidgets.QTableWidgetItem('Title'))
-        categoriesTable.setItem(0,2,QtWidgets.QTableWidgetItem(''))
+        self.cur.execute('SELECT id, title FROM category ORDER BY title ASC')
+        self.categories = self.cur.fetchall()
+
+        self.mainTable = QtWidgets.QTableWidget()
+        self.mainTable.setRowCount(len(self.categories)+1)
+        self.mainTable.setColumnCount(3)
+        self.mainTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
+        self.mainTable.setItem(0,1,QtWidgets.QTableWidgetItem('Title'))
+        self.mainTable.setItem(0,2,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for category in self.categories:
-            categoriesTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
-            categoriesTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
+            self.mainTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
+            self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
-            buttonDelete.clicked.connect(partial(self.Delete, category[0]))
-            categoriesTable.setCellWidget(numberOfRow,2,buttonDelete)
+            buttonDelete.clicked.connect(partial(self.Delete, category[0], numberOfRow))
+            self.mainTable.setCellWidget(numberOfRow,2,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
 
-        return categoriesTable
+        return self.mainTable
 
     def displayItemTable(self):
         self.cur.execute('SELECT i.id, c.title AS category, i.title AS item FROM item i LEFT JOIN category c ON c.id = i.category_id')
         items = self.cur.fetchall()
 
-        itemsTable = QtWidgets.QTableWidget()
-        itemsTable.setRowCount(len(items)+1)
-        itemsTable.setColumnCount(4)
-        itemsTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
-        itemsTable.setItem(0,1,QtWidgets.QTableWidgetItem('Category'))
-        itemsTable.setItem(0,2,QtWidgets.QTableWidgetItem('Title'))
-        itemsTable.setItem(0,3,QtWidgets.QTableWidgetItem(''))
+        self.mainTable = QtWidgets.QTableWidget()
+        self.mainTable.setRowCount(len(items)+1)
+        self.mainTable.setColumnCount(4)
+        self.mainTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
+        self.mainTable.setItem(0,1,QtWidgets.QTableWidgetItem('Category'))
+        self.mainTable.setItem(0,2,QtWidgets.QTableWidgetItem('Title'))
+        self.mainTable.setItem(0,3,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for item in items:
-            itemsTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(item[0])))
-            itemsTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(item[1]))
-            itemsTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
+            self.mainTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(item[0])))
+            self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(item[1]))
+            self.mainTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
-            buttonDelete.clicked.connect(partial(self.Delete, item[0]))
-            itemsTable.setCellWidget(numberOfRow,3,buttonDelete)
+            buttonDelete.clicked.connect(partial(self.Delete, item[0], numberOfRow))
+            self.mainTable.setCellWidget(numberOfRow,3,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
-        return itemsTable
+        return self.mainTable
 
     def selectionChange(self, text):
         self.layout.itemAt(3).widget().deleteLater()
@@ -103,16 +104,16 @@ class Ui_MainWindow(object):
         else:
             print('Group is not defined')
 
-    def Delete(self, id):
+    def Delete(self, id, numberOfRow):
         if self.selectedTable == "Categories":
-            print("Categories")
-            #TO DO check that it's deleted then remove from table 
+            # TODO delete the correct item when we delete multiple rows
             self.cur.execute('DELETE FROM item WHERE category_id = ?',(id,))
             self.cur.execute('DELETE FROM category WHERE id = ?',(id,))
             self.database.commit()
+            self.mainTable.removeRow(numberOfRow)
         elif self.selectedTable == "Items":
-            print("Items")
             self.cur.execute('DELETE FROM item WHERE id = ?',(id,))
             self.database.commit()
+            self.mainTable.removeRow(numberOfRow)
         else:
             print('Group is not defined')

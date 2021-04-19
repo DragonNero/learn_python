@@ -64,7 +64,6 @@ class Ui_DialogWindow(object):
             print('Add value')
             return
 
-        print(titleValue)
         if self.selectedTable == "Categories":
             self.cur.execute('INSERT INTO category (title) VALUES (?)',(titleValue,))
             self.database.commit()
@@ -72,4 +71,5 @@ class Ui_DialogWindow(object):
             selectedCategory = self.selectCategory.currentText()
             self.cur.execute('INSERT INTO item (category_id, title) VALUES ((SELECT id FROM category WHERE title = ? LIMIT 1),?)',(selectedCategory, titleValue))
             self.database.commit()
+            #To do added to the table of the main window
         DialogWindow.close()
