@@ -60,7 +60,7 @@ class Ui_MainWindow(object):
             self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
-            buttonDelete.clicked.connect(partial(self.Delete, category[0], numberOfRow))
+            buttonDelete.clicked.connect(partial(self.Delete, category[0], buttonDelete))
             self.mainTable.setCellWidget(numberOfRow,2,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
@@ -86,7 +86,7 @@ class Ui_MainWindow(object):
             self.mainTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
-            buttonDelete.clicked.connect(partial(self.Delete, item[0], numberOfRow))
+            buttonDelete.clicked.connect(partial(self.Delete, item[0], buttonDelete))
             self.mainTable.setCellWidget(numberOfRow,3,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
@@ -104,16 +104,16 @@ class Ui_MainWindow(object):
         else:
             print('Group is not defined')
 
-    def Delete(self, id, numberOfRow):
+    def Delete(self, id, buttonDelete):
+        index = self.mainTable.indexAt(buttonDelete.pos())
         if self.selectedTable == "Categories":
-            # TODO delete the correct item when we delete multiple rows
             self.cur.execute('DELETE FROM item WHERE category_id = ?',(id,))
             self.cur.execute('DELETE FROM category WHERE id = ?',(id,))
             self.database.commit()
-            self.mainTable.removeRow(numberOfRow)
+            self.mainTable.removeRow(index.row())
         elif self.selectedTable == "Items":
             self.cur.execute('DELETE FROM item WHERE id = ?',(id,))
             self.database.commit()
-            self.mainTable.removeRow(numberOfRow)
+            self.mainTable.removeRow(index.row())
         else:
             print('Group is not defined')
