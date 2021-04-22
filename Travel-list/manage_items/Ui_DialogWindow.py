@@ -2,12 +2,13 @@ from functools import partial
 from PyQt5 import QtCore, QtWidgets
 
 class Ui_DialogWindow(object):
-    def __init__(self, selectedTable, database):
+    def __init__(self, selectedTable, database, mainWindow):
         self.selectedTable = selectedTable
         self.database = database
         self.cur = self.database.cursor()
         self.cur.execute('SELECT id, title FROM category ORDER BY title ASC')
         self.categories = self.cur.fetchall()
+        self.mainWindow = mainWindow
 
     def setupUi(self, DialogWindow):
         DialogWindow.setObjectName("DialogWindow")
@@ -72,4 +73,5 @@ class Ui_DialogWindow(object):
             self.cur.execute('INSERT INTO item (category_id, title) VALUES ((SELECT id FROM category WHERE title = ? LIMIT 1),?)',(selectedCategory, titleValue))
             self.database.commit()
             #To do added to the table of the main window
+        self.mainWindow.selectionChange(self.mainWindow.selectedTable)
         DialogWindow.close()
