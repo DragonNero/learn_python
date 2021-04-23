@@ -49,21 +49,25 @@ class Ui_MainWindow(object):
 
         self.mainTable = QtWidgets.QTableWidget()
         self.mainTable.setRowCount(len(self.categories)+1)
-        self.mainTable.setColumnCount(3)
+        self.mainTable.setColumnCount(4)
         self.mainTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
         self.mainTable.setItem(0,1,QtWidgets.QTableWidgetItem('Title'))
         self.mainTable.setItem(0,2,QtWidgets.QTableWidgetItem(''))
+        self.mainTable.setItem(0,3,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for category in self.categories:
             self.mainTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(category[0])))
             self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
+            buttonEdit = QtWidgets.QPushButton()
+            buttonEdit.setIcon(QtGui.QIcon('manage_items/pencil.svg'))
+            buttonEdit.clicked.connect(partial(self.Edit, category[0], buttonEdit))
+            self.mainTable.setCellWidget(numberOfRow,2, buttonEdit)
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
             buttonDelete.clicked.connect(partial(self.Delete, category[0], buttonDelete))
-            self.mainTable.setCellWidget(numberOfRow,2,buttonDelete)
+            self.mainTable.setCellWidget(numberOfRow,3,buttonDelete)
             numberOfRow  = numberOfRow  + 1
-
 
         return self.mainTable
 
@@ -73,21 +77,26 @@ class Ui_MainWindow(object):
 
         self.mainTable = QtWidgets.QTableWidget()
         self.mainTable.setRowCount(len(items)+1)
-        self.mainTable.setColumnCount(4)
+        self.mainTable.setColumnCount(5)
         self.mainTable.setItem(0,0,QtWidgets.QTableWidgetItem('Id'))
         self.mainTable.setItem(0,1,QtWidgets.QTableWidgetItem('Category'))
         self.mainTable.setItem(0,2,QtWidgets.QTableWidgetItem('Title'))
         self.mainTable.setItem(0,3,QtWidgets.QTableWidgetItem(''))
+        self.mainTable.setItem(0,4,QtWidgets.QTableWidgetItem(''))
 
         numberOfRow = 1
         for item in items:
             self.mainTable.setItem(numberOfRow,0,QtWidgets.QTableWidgetItem(str(item[0])))
             self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(item[1]))
             self.mainTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
+            buttonEdit = QtWidgets.QPushButton()
+            buttonEdit.setIcon(QtGui.QIcon('manage_items/pencil.svg'))
+            buttonEdit.clicked.connect(partial(self.Edit, item[0], buttonEdit))
+            self.mainTable.setCellWidget(numberOfRow,3, buttonEdit)
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
             buttonDelete.clicked.connect(partial(self.Delete, item[0], buttonDelete))
-            self.mainTable.setCellWidget(numberOfRow,3,buttonDelete)
+            self.mainTable.setCellWidget(numberOfRow,4,buttonDelete)
             numberOfRow  = numberOfRow  + 1
 
         return self.mainTable
@@ -103,6 +112,9 @@ class Ui_MainWindow(object):
             self.layout.addWidget(self.displayItemTable(), 2, 0, 1, 2)
         else:
             print('Group is not defined')
+
+    def Edit(self, id, buttonEdit):
+        print(id, buttonEdit)
 
     def Delete(self, id, buttonDelete):
         index = self.mainTable.indexAt(buttonDelete.pos())
