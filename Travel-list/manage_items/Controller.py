@@ -11,7 +11,7 @@ class Controller:
     def Show_MainWindow(self):
 
         self.MainWindow = QtWidgets.QMainWindow()
-        self.mainUi = Ui_MainWindow(self.database)
+        self.mainUi = Ui_MainWindow(self.database, self)
         self.mainUi.setupUi(self.MainWindow)
         self.mainUi.addButton.clicked.connect(self.Show_DialogWindow)
 

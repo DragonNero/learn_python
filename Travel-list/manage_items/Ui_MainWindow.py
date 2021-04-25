@@ -2,8 +2,9 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from functools import partial
 
 class Ui_MainWindow(object):
-    def __init__(self, database):
+    def __init__(self, database, controller):
         self.database = database
+        self.controller = controller
         self.selectedTable = 'Categories'
         self.cur = self.database.cursor()
 
@@ -37,11 +38,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle("Manage items and categories")
         self.addButton.setText("Add")
 
-    def LoadDialogWindow(self):
-        DialogWindow = QtWidgets.QMainWindow()
-        ui = Ui_DialogWindow()
-        ui.setupUi(DialogWindow)
-        DialogWindow.show()
+
 
     def displayCategoryTable(self):
         self.cur.execute('SELECT id, title FROM category ORDER BY title ASC')
@@ -114,6 +111,7 @@ class Ui_MainWindow(object):
             print('Group is not defined')
 
     def Edit(self, id, buttonEdit):
+        self.controller.Show_DialogWindow()
         print(id, buttonEdit)
 
     def Delete(self, id, buttonDelete):
