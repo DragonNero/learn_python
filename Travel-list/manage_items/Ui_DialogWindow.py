@@ -1,14 +1,17 @@
 from functools import partial
 from PyQt5 import QtCore, QtWidgets
 
+
 class Ui_DialogWindow(object):
-    def __init__(self, selectedTable, database, mainWindow):
+    def __init__(self, selectedTable, database, mainWindow, editId):
         self.selectedTable = selectedTable
         self.database = database
         self.cur = self.database.cursor()
         self.cur.execute('SELECT id, title FROM category ORDER BY title ASC')
         self.categories = self.cur.fetchall()
         self.mainWindow = mainWindow
+        self.editId = editId
+        print(self.editId)
 
     def setupUi(self, DialogWindow):
         DialogWindow.setObjectName("DialogWindow")

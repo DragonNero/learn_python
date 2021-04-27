@@ -58,7 +58,7 @@ class Ui_MainWindow(object):
             self.mainTable.setItem(numberOfRow,1,QtWidgets.QTableWidgetItem(category[1]))
             buttonEdit = QtWidgets.QPushButton()
             buttonEdit.setIcon(QtGui.QIcon('manage_items/pencil.svg'))
-            buttonEdit.clicked.connect(partial(self.Edit, category[0], buttonEdit))
+            buttonEdit.clicked.connect(partial(self.Edit, category[0]))
             self.mainTable.setCellWidget(numberOfRow,2, buttonEdit)
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
@@ -88,7 +88,7 @@ class Ui_MainWindow(object):
             self.mainTable.setItem(numberOfRow,2,QtWidgets.QTableWidgetItem(item[2]))
             buttonEdit = QtWidgets.QPushButton()
             buttonEdit.setIcon(QtGui.QIcon('manage_items/pencil.svg'))
-            buttonEdit.clicked.connect(partial(self.Edit, item[0], buttonEdit))
+            buttonEdit.clicked.connect(partial(self.Edit, item[0]))
             self.mainTable.setCellWidget(numberOfRow,3, buttonEdit)
             buttonDelete = QtWidgets.QPushButton()
             buttonDelete.setIcon(QtGui.QIcon('manage_items/trash.svg'))
@@ -110,9 +110,8 @@ class Ui_MainWindow(object):
         else:
             print('Group is not defined')
 
-    def Edit(self, id, buttonEdit):
-        self.controller.Show_DialogWindow()
-        print(id, buttonEdit)
+    def Edit(self, id):
+        self.controller.Show_DialogWindow(id)
 
     def Delete(self, id, buttonDelete):
         index = self.mainTable.indexAt(buttonDelete.pos())

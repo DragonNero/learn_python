@@ -17,10 +17,10 @@ class Controller:
 
         self.MainWindow.show()
 
-    def Show_DialogWindow(self):
+    def Show_DialogWindow(self, editId):
 
         self.DialogWindow = QtWidgets.QMainWindow()
-        self.DialogUi = Ui_DialogWindow(self.mainUi.selectedTable, self.database, self.mainUi)
+        self.DialogUi = Ui_DialogWindow(self.mainUi.selectedTable, self.database, self.mainUi, editId)
         self.DialogUi.setupUi(self.DialogWindow)
 
         self.DialogWindow.show()
