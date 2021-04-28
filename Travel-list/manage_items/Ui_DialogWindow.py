@@ -11,7 +11,6 @@ class Ui_DialogWindow(object):
         self.categories = self.cur.fetchall()
         self.mainWindow = mainWindow
         self.editId = editId
-        print(self.editId)
 
     def setupUi(self, DialogWindow):
         DialogWindow.setObjectName("DialogWindow")
@@ -19,7 +18,16 @@ class Ui_DialogWindow(object):
         self.centralWidget = QtWidgets.QWidget(DialogWindow)
         self.layout = QtWidgets.QGridLayout()
 
-        self.labelBox = QtWidgets.QLabel('<h1>Add '+ self.selectedTable+'</h1>')
+        title = ''
+        if self.selectedTable == 'Items' and self.editId == False:
+            title = 'Add item'
+        elif self.selectedTable == 'Categories' and self.editId == False:
+            title = 'Add category'
+        elif self.selectedTable == 'Items' and type(self.editId) == int:
+            title = 'Edit item #'+ str(self.editId)
+        elif self.selectedTable == 'Categories' and type(self.editId) == int:
+            title = 'Edit category #'+ str(self.editId)
+        self.labelBox = QtWidgets.QLabel('<h1>'+ title +'</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
 
         self.inputTitleLabel = QtWidgets.QLabel('Title')
