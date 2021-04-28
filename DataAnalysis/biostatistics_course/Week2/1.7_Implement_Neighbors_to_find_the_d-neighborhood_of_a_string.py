@@ -1,4 +1,4 @@
-chars = "ACG"
+chars = "ACGT"
 
 def neighbors(pattern, d):
     assert(d <= len(pattern))
@@ -15,4 +15,4 @@ def neighbors(pattern, d):
 
     return r
 
-print(neighbors("ACG", 1))
+print(neighbors("CGCCAGACCA", 2))
