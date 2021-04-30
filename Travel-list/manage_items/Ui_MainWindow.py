@@ -10,7 +10,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
 
-        MainWindow.resize(400, 300)
+        MainWindow.resize(800, 600)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
 
         self.layout = QtWidgets.QGridLayout()

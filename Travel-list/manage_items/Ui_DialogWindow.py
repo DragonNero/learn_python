@@ -17,7 +17,7 @@ class Ui_DialogWindow(object):
         DialogWindow.resize(400, 300)
         self.centralWidget = QtWidgets.QWidget(DialogWindow)
         self.layout = QtWidgets.QGridLayout()
-
+        #TODO fill values on edit
         title = ''
         if self.selectedTable == 'Items' and self.editId == False:
             title = 'Add item'
@@ -76,13 +76,19 @@ class Ui_DialogWindow(object):
             print('Add value')
             return
 
-        if self.selectedTable == "Categories":
+        if self.selectedTable == "Categories" and self.editId == False:
             self.cur.execute('INSERT INTO category (title) VALUES (?)',(titleValue,))
             self.database.commit()
-        elif self.selectedTable == "Items":
+        elif self.selectedTable == "Items" and self.editId == False:
             selectedCategory = self.selectCategory.currentText()
             self.cur.execute('INSERT INTO item (category_id, title) VALUES ((SELECT id FROM category WHERE title = ? LIMIT 1),?)',(selectedCategory, titleValue))
             self.database.commit()
-            #To do added to the table of the main window
+        elif self.selectedTable == 'Items' and type(self.editId) == int:
+            selectedCategory = self.selectCategory.currentText()
+            self.cur.execute('UPDATE item SET title = ?, category_id = (SELECT id FROM category WHERE title = ? LIMIT 1) WHERE id = ? ',(titleValue, selectedCategory, self.editId))
+            self.database.commit()
+        elif self.selectedTable == 'Categories' and type(self.editId) == int:
+            self.cur.execute('UPDATE category SET title = ? WHERE id = ?',(titleValue,self.editId))
+            self.database.commit()
         self.mainWindow.selectionChange(self.mainWindow.selectedTable)
         DialogWindow.close()
