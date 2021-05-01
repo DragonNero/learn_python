@@ -19,28 +19,44 @@ class Ui_DialogWindow(object):
         self.layout = QtWidgets.QGridLayout()
         #TODO fill values on edit
         title = ''
+        editTitle = ''
+        editSelectedCategory = ''
         if self.selectedTable == 'Items' and self.editId == False:
             title = 'Add item'
         elif self.selectedTable == 'Categories' and self.editId == False:
             title = 'Add category'
         elif self.selectedTable == 'Items' and type(self.editId) == int:
             title = 'Edit item #'+ str(self.editId)
+            self.cur.execute('SELECT title, category_id FROM item WHERE id = ?', (self.editId,))
+            editItem = self.cur.fetchone()
+            editTitle = editItem[0]
+            editSelectedCategory = editItem[1]
         elif self.selectedTable == 'Categories' and type(self.editId) == int:
             title = 'Edit category #'+ str(self.editId)
+            self.cur.execute('SELECT title FROM category WHERE id = ?', (self.editId,))
+            editCategory = self.cur.fetchone()
+            editTitle = editCategory[0]
         self.labelBox = QtWidgets.QLabel('<h1>'+ title +'</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
 
         self.inputTitleLabel = QtWidgets.QLabel('Title')
         self.layout.addWidget(self.inputTitleLabel, 1, 0)
         self.inputTitle = QtWidgets.QLineEdit()
+        self.inputTitle.setText(editTitle)
         self.layout.addWidget(self.inputTitle, 1, 1)
 
         if self.selectedTable == 'Items':
             self.selectCategoryLabel = QtWidgets.QLabel('Category')
             self.layout.addWidget(self.selectCategoryLabel, 2, 0)
             self.selectCategory = QtWidgets.QComboBox()
+            index = 0
+            selectIndex = 0
             for category in self.categories:
+                if category[0] == editSelectedCategory:
+                    selectIndex = index
                 self.selectCategory.addItem(category[1])
+                index = index + 1
+            self.selectCategory.setCurrentIndex(selectIndex)
             self.layout.addWidget(self.selectCategory, 2, 1)
 
         self.cancelButton = QtWidgets.QPushButton(self.centralWidget)
