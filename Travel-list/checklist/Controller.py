@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-#from .Ui_DialogWindow import Ui_DialogWindow
+from .Ui_NewWindow import Ui_NewWindow
 from .Ui_MainWindow import Ui_MainWindow
 
 class Controller:
@@ -13,14 +13,14 @@ class Controller:
         self.MainWindow = QtWidgets.QMainWindow()
         self.mainUi = Ui_MainWindow(self.database, self)
         self.mainUi.setupUi(self.MainWindow)
-        #self.mainUi.addButton.clicked.connect(self.Show_DialogWindow)
+        self.mainUi.newButton.clicked.connect(self.Show_NewWindow)
 
         self.MainWindow.show()
 
-    #def Show_DialogWindow(self, editId):
+    def Show_NewWindow(self):
 
-        #self.DialogWindow = QtWidgets.QMainWindow()
-        #self.DialogUi = Ui_DialogWindow(self.mainUi.selectedTable, self.database, self.mainUi, editId)
-        #self.DialogUi.setupUi(self.DialogWindow)
+        self.NewWindow = QtWidgets.QMainWindow()
+        self.NewUi = Ui_NewWindow(self.database, self)
+        self.NewUi.setupUi(self.NewWindow)
 
-        #self.DialogWindow.show()
+        self.NewWindow.show()
