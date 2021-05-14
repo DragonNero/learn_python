@@ -6,6 +6,7 @@ class Ui_NewWindow(object):
         self.database = database
         self.controller = controller
         self.cur = self.database.cursor()
+        self.selectedCategories = []
 
     def setupUi(self, NewWindow):
 
@@ -26,12 +27,14 @@ class Ui_NewWindow(object):
         for index, category in enumerate(categories):
             colCounter = index % 4
             self.categoryCheck = QtWidgets.QCheckBox(category[1])
+            self.categoryCheck.clicked.connect(partial(self.updateSelectedCategories, category[0], self.categoryCheck))
             self.layout.addWidget(self.categoryCheck, rowCounter, colCounter)
             if colCounter == 3:
                 rowCounter = rowCounter + 1
 
         self.startButton = QtWidgets.QPushButton(self.centralWidget)
         self.layout.addWidget(self.startButton, rowCounter+1, 4)
+        self.startButton.clicked.connect(self.start)
 
         self.centralWidget.setLayout(self.layout)
         NewWindow.setCentralWidget(self.centralWidget)
@@ -44,3 +47,16 @@ class Ui_NewWindow(object):
         _translate = QtCore.QCoreApplication.translate
         NewWindow.setWindowTitle("Create new checklist")
         self.startButton.setText("Start")
+
+    def start(self):
+        if not self.selectedCategories:
+            print('List is empty')
+            return
+        print(self.selectedCategories)
+
+
+    def updateSelectedCategories(self, categoryId, checkBox):
+        if checkBox.isChecked() == True:
+            self.selectedCategories.append(categoryId)
+        else:
+            self.selectedCategories.remove(categoryId)
