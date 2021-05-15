@@ -14,7 +14,6 @@ class Ui_NewWindow(object):
         self.centralWidget = QtWidgets.QWidget(NewWindow)
 
         self.layout = QtWidgets.QGridLayout()
-        #TODO fill the interface
         self.labelBox = QtWidgets.QLabel('<h1>Create a new check list</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 4)
 
@@ -52,8 +51,20 @@ class Ui_NewWindow(object):
         if not self.selectedCategories:
             print('List is empty')
             return
-        print(self.selectedCategories)
 
+        self.cur.execute('SELECT id FROM item WHERE category_id IN ({catIds})'.format(catIds = ','.join(['?']*len(self.selectedCategories))), self.selectedCategories)
+        items = self.cur.fetchall()
+        self.cur.execute('INSERT INTO checklist (title) VALUES (?)', ('myCheckList',))
+        checkListId = self.cur.lastrowid
+
+        for categoryId in self.selectedCategories:
+            self.cur.execute('INSERT INTO checklist_category (checklist_id, category_id) VALUES (?, ?)', (checkListId, categoryId))
+
+        for itemId in items:
+            self.cur.execute('INSERT INTO checklist_item (checklist_id, item_id) VALUES (?, ?)', (checkListId, itemId[0]))
+
+        self.database.commit()
+        #TO DO close this window, open checklist window
 
     def updateSelectedCategories(self, categoryId, checkBox):
         if checkBox.isChecked() == True:
