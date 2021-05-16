@@ -33,7 +33,7 @@ class Ui_NewWindow(object):
 
         self.startButton = QtWidgets.QPushButton(self.centralWidget)
         self.layout.addWidget(self.startButton, rowCounter+1, 4)
-        self.startButton.clicked.connect(self.start)
+        self.startButton.clicked.connect(partial(self.start, NewWindow))
 
         self.centralWidget.setLayout(self.layout)
         NewWindow.setCentralWidget(self.centralWidget)
@@ -47,7 +47,7 @@ class Ui_NewWindow(object):
         NewWindow.setWindowTitle("Create new checklist")
         self.startButton.setText("Start")
 
-    def start(self):
+    def start(self, NewWindow):
         if not self.selectedCategories:
             print('List is empty')
             return
@@ -64,7 +64,8 @@ class Ui_NewWindow(object):
             self.cur.execute('INSERT INTO checklist_item (checklist_id, item_id) VALUES (?, ?)', (checkListId, itemId[0]))
 
         self.database.commit()
-        #TO DO close this window, open checklist window
+        self.controller.Show_CheckListWindow()
+        NewWindow.close()
 
     def updateSelectedCategories(self, categoryId, checkBox):
         if checkBox.isChecked() == True:
