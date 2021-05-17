@@ -17,12 +17,20 @@ class Ui_CheckListWindow(object):
         self.labelBox = QtWidgets.QLabel('<h1>Check list</h1>')
         self.layout.addWidget(self.labelBox, 0, 0, 1, 2)
 
+        self.cur.execute('SELECT ci.id, i.title, ci.checked FROM checklist_item ci LEFT JOIN item i ON ci.item_id = i.id WHERE ci.checklist_id = (SELECT MAX (id) FROM checklist) ORDER BY i.category_id')
+        checkListItems = self.cur.fetchall()
+        rowCounter = 1
+        for item in checkListItems:
+            self.categoryCheck = QtWidgets.QCheckBox(item[1])
+            #self.categoryCheck.clicked.connect(partial(self.updateSelectedCategories, category[0], self.categoryCheck))
+            self.layout.addWidget(self.categoryCheck, rowCounter, 0)
+            rowCounter = rowCounter + 1
+
         self.centralWidget.setLayout(self.layout)
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
