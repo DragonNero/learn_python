@@ -21,9 +21,9 @@ class Ui_CheckListWindow(object):
         checkListItems = self.cur.fetchall()
         rowCounter = 1
         for item in checkListItems:
-            self.categoryCheck = QtWidgets.QCheckBox(item[1])
-            #self.categoryCheck.clicked.connect(partial(self.updateSelectedCategories, category[0], self.categoryCheck))
-            self.layout.addWidget(self.categoryCheck, rowCounter, 0)
+            self.itemCheck = QtWidgets.QCheckBox(item[1])
+            self.itemCheck.clicked.connect(partial(self.updateCheckListItem, item[0], self.itemCheck))
+            self.layout.addWidget(self.itemCheck, rowCounter, 0)
             rowCounter = rowCounter + 1
 
         self.centralWidget.setLayout(self.layout)
@@ -35,3 +35,6 @@ class Ui_CheckListWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle("Check list")
+
+    def updateCheckListItem(self, checkListItemId, checkBox):
+        print(checkListItemId, checkBox.isChecked())
