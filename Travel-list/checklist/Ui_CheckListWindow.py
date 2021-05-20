@@ -22,6 +22,7 @@ class Ui_CheckListWindow(object):
         rowCounter = 1
         for item in checkListItems:
             self.itemCheck = QtWidgets.QCheckBox(item[1])
+            self.itemCheck.setChecked(item[2])
             self.itemCheck.clicked.connect(partial(self.updateCheckListItem, item[0], self.itemCheck))
             self.layout.addWidget(self.itemCheck, rowCounter, 0)
             rowCounter = rowCounter + 1
@@ -37,4 +38,5 @@ class Ui_CheckListWindow(object):
         MainWindow.setWindowTitle("Check list")
 
     def updateCheckListItem(self, checkListItemId, checkBox):
-        print(checkListItemId, checkBox.isChecked())
+        self.cur.execute('UPDATE checklist_item SET checked = ? WHERE id = ?',(checkBox.isChecked(), checkListItemId))
+        self.database.commit()
